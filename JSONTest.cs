@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -53,6 +54,29 @@ namespace InterviewTestQA
 
             // Assert that the number of items matches the expected count
             Assert.AreEqual(expectedCount, costAnalysisItems.Count, "The count of items in the JSON file does not match.");
+        }
+
+        [Test]
+        public void Test_TopItem_ByCost()
+        {
+            // Get the item with the highest Cost
+            var topItem = costAnalysisItems.OrderByDescending(item => item.Cost).FirstOrDefault();
+
+            // Assert that the top item exists and check its CountryId
+            Assert.IsNotNull(topItem, "No items were found in the list.");
+            Assert.AreEqual(276, topItem.CountryId, "The CountryId of the top item by cost does not match the expected value."); // Replace 276 with the actual expected CountryId
+        }
+
+        [Test]
+        public void Test_SumCost_ForYear2016()
+        {
+            // Calculate the total Cost for items where YearId is "2016"
+            double totalCost2016 = costAnalysisItems
+                .Where(item => item.YearId == "2016")
+                .Sum(item => item.Cost);
+
+            // Assert the total cost for 2016
+            Assert.AreEqual(123456.78, totalCost2016, 0.01, "The total cost for the year 2016 does not match the expected value."); // Replace 123456.78 with the expected total
         }
     }
 }
